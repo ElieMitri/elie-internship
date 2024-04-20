@@ -27,7 +27,6 @@ const Explore = () => {
     //FROM MAIN DONOT REMOVE
   }, []);
 
-
   return (
     <div id="wrapper">
       <div className="no-bottom no-top" id="content">

@@ -10,7 +10,10 @@ const ExploreItems = () => {
   const [loading, setLoading] = useState(true);
   const [nfts, setNfts] = useState(8);
   const [disabled, setDisabled] = useState(false);
-  const [filter, setFilter] = useState()
+  const [filter, setFilter] = useState();
+  const [seconds, setSeconds] = useState(14);
+  const [minutes, setMinutes] = useState(32);
+  const [hours, setHours] = useState(2);
 
   async function fetchData() {
     const response = await axios(
@@ -34,7 +37,7 @@ const ExploreItems = () => {
     setExploreItems(response.data);
     // console.log(response.data);
     setLoading(false);
-  }   
+  }
 
   function loadMore() {
     setNfts(nfts + 4);
@@ -45,6 +48,32 @@ const ExploreItems = () => {
       setDisabled(false);
     }
   }
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      if (hours === 0 && minutes === 0 && seconds === 0) {
+        clearInterval(timer);
+        return;
+      }
+
+      if (seconds > 0) {
+        setSeconds(prevSeconds => prevSeconds - 1);
+      } else {
+        if (minutes > 0) {
+          setMinutes(prevMinutes => prevMinutes - 1);
+          setSeconds(59);
+        } else {
+          if (hours > 0) {
+            setHours(prevHours => prevHours - 1);
+            setMinutes(59);
+            setSeconds(59);
+          }
+        }
+      }
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [hours, minutes, seconds]);
 
   return (
     <>
@@ -93,7 +122,10 @@ const ExploreItems = () => {
                       <i className="fa fa-check"></i>
                     </Link>
                   </div>
-                  {/* <div className="de_countdown">5h 30m 32s</div> */}
+                  <div className="de_countdown">
+                    {" "}
+                    {hours}h {minutes}m {seconds}s
+                  </div>
 
                   <div className="nft__item_wrap">
                     <div className="nft__item_extra">
